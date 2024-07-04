@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ITP4915Assignment_69</string>
+    <string name="GameName">Mathematic Game</string>
+    <string name="Close">CLOSE</string>
+    <string name="YourRecords">YOUR RECORDS</string>
+    <string name="GameRanking">GAME RANKING</string>
+    <string name="Play">PLAY</string>
+</resources>
