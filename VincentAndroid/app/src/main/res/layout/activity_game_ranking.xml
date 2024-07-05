@@ -6,31 +6,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".GameRanking">
+    tools:context=".GameRanking"
+    android:background="@color/background">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_marginTop="15dp"
         android:layout_height="56dp"
-        android:background="@color/black"
-        android:gravity="center"
         android:layout_gravity="center"
-        />
-
+        android:layout_marginTop="15dp"
+        android:background="@color/toolbar"
+        android:gravity="center"
+        app:titleTextColor="@color/background" />
 
 
     <ListView
+        android:id="@+id/lvRanking"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/lvRanking" />
-
-    <Button
+        android:layout_height="450dp"
+        android:scrollbars="vertical"
+        />
+    <com.google.android.material.button.MaterialButton
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Back Home"
-        android:onClick="goToHome"
-        android:layout_gravity="center"/>
+        android:text="Back To Menu"
+        android:onClick="goToMenu"
+        android:layout_gravity="center"
+        android:textColor="@color/textColor"
+        />
+
 
 
 

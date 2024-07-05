@@ -5,81 +5,104 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:orientation="vertical">
+    android:background="@color/background"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
 
-  <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="300dp"
-      >
-      <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/GameName"
-          android:textSize="50sp"
-          android:textStyle="bold"
-          android:layout_marginTop="75dp"
-          android:layout_marginLeft="30dp"
-          android:layout_marginRight="30dp"
-          android:gravity="center"
-          />
-  </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="300dp">
+
+        <ImageView
+            android:id="@+id/myImageView"
+            android:layout_margin="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+      />
+        <TextView
+            android:layout_width="234dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:rotation="360"
+            android:text="@string/GameName"
+            android:textColor="@color/textColor"
+            android:textSize="50sp"
+            android:textStyle="bold"
+            android:visibility="visible" />
+
+    </RelativeLayout>
+
     <LinearLayout
         style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-      <Button
-          android:layout_width="150dp"
-          android:layout_height="wrap_content"
-          android:text="@string/Play"
-          android:textSize="24dp"
-          android:layout_gravity="center"
-          android:layout_marginLeft="70dp"
-          android:layout_marginRight="70dp"
-          android:layout_marginBottom="20dp"
-          style="@style/HomeButton"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/GG"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="70dp"
+            android:layout_marginRight="70dp"
+            android:layout_marginBottom="20dp"
+            android:onClick="playGame"
+            android:textColor="@color/textColor"
+            android:text="@string/Play"
+            android:textSize="30dp" />
 
-          />
-      <Button
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/GameRanking"
-          android:layout_gravity="center"
-          android:textSize="24dp"
-          android:layout_marginLeft="70dp"
-          android:layout_marginRight="70dp"
-          android:layout_marginBottom="20dp"
-          style="@style/HomeButton"
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="70dp"
+            android:layout_marginRight="70dp"
+            android:layout_marginBottom="20dp"
+            android:onClick="goToGameRanking"
+            android:textColor="@color/textColor"
+            android:text="@string/GameRanking"
+            android:textSize="24dp" />
 
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="70dp"
+            android:layout_marginRight="70dp"
+            android:layout_marginBottom="20dp"
+            android:onClick="goToYourRecord"
+            android:textColor="@color/textColor"
+            android:text="@string/YourRecords"
+            android:textSize="24sp" />
 
-          />
-      <Button
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/YourRecords"
-          android:layout_gravity="center"
-          android:textSize="24sp"
-          android:layout_marginLeft="70dp"
-          android:layout_marginRight="70dp"
-          android:layout_marginBottom="20dp"
-          android:shape="rectangle"
-          style="@style/HomeButton"
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="70dp"
+            android:layout_marginRight="70dp"
+            android:layout_marginBottom="20dp"
+            android:onClick="goToSetting"
+            android:textColor="@color/textColor"
+            android:text="@string/Setting"
+            android:textSize="24dp" />
 
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="70dp"
+            android:layout_marginRight="70dp"
+            android:onClick="closeGame"
+            android:textColor="@color/textColor"
+            android:text="@string/Close"
+            android:textSize="24dp" />
 
-          />
-      <Button
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/Close"
-          android:textSize="24dp"
-          android:layout_gravity="center"
-          android:layout_marginLeft="70dp"
-          android:layout_marginRight="70dp"
-          style="@style/HomeButton"
-
-          />
     </LinearLayout>
 
 

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="HomeButton">
-        <item name="android:textColor">#FFFFFF</item>
-        <item name="android:radius">4dp</item>
-        <item name="android:shape">rectangle</item>
+        <item name="android:textColor">#F3F7EC</item>
         <item name="android:textSize">18sp</item>
+        <item name="android:background">#005C78</item>
+    </style>
+    <style name="Button.White" parent="ThemeOverlay.AppCompat">
+        <item name="colorAccent">@android:color/white</item>
     </style>
 </resources>

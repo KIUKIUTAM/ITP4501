@@ -50,6 +50,8 @@ public class GameRanking extends AppCompatActivity {
         }
     }
 
+
+
     private class DownloadTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... values) {
@@ -97,16 +99,16 @@ public class GameRanking extends AppCompatActivity {
     public void receiveData(String result){
         Log.d("ReceiveData",result);
         try{
-            JSONArray rankAarray = new JSONArray(result);
-            listitems = new String[rankAarray.length()];
-            for(int i = 0;i<rankAarray.length();i++){
+            JSONArray rankAaray = new JSONArray(result);
+            listitems = new String[rankAaray.length()];
+            for(int i = 0;i<rankAaray.length();i++){
                 String msg = "";
                 msg +="Rank " + (i+1)+ ",";
-                String name = rankAarray.getJSONObject(i).getString("Name");
+                String name = rankAaray.getJSONObject(i).getString("Name");
                 msg += name + ",";
-                String correcttime =  rankAarray.getJSONObject(i).getString("Correct");
+                String correcttime =  rankAaray.getJSONObject(i).getString("Correct");
                 msg += "Correct Answer " + correcttime + ",";
-                String  time = rankAarray.getJSONObject(i).getString("Time");
+                String  time = rankAaray.getJSONObject(i).getString("Time");
                 msg += "Time: " +time + "," + "sec";
 
                 listitems[i] = msg;

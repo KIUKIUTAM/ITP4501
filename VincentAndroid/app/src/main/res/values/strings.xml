@@ -5,4 +5,11 @@
     <string name="YourRecords">YOUR RECORDS</string>
     <string name="GameRanking">GAME RANKING</string>
     <string name="Play">PLAY</string>
+    <string name="Setting">Setting</string>
+    <string name="primary_school">Primary School level</string>
+    <string name="secondary_school">Secondary School level</string>
+    <string name="university">University level</string>
+    <string name="Home">Home</string>
+    <string name="normalMode">Normal Mode</string>
+    <string name="TimeUpMode">Time Up Mode</string>
 </resources>

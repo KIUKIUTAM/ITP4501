@@ -29,7 +29,7 @@ android {
 }
 
 dependencies {
-
+    implementation(libs.glide.v4xx)
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

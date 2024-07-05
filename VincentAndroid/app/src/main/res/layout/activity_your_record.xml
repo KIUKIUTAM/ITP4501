@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background"
+    tools:context=".YourRecord">
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:background="@color/toolbar"
+        android:gravity="center"
+        app:titleTextColor="@color/background" />
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="3">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="Sort By:"
+            android:textColor="@color/textColor"/>
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/spinner_ip"
+            android:spinnerMode="dropdown"
+            android:layout_gravity="center_vertical"
+            android:entries="@array/sortBy"
+            android:layout_weight="2"
+            />
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:spinnerMode="dropdown"
+            android:layout_gravity="center_vertical"
+            android:entries="@array/ASC"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+
+    <ListView
+        android:id="@+id/lvRanking"
+        android:layout_width="match_parent"
+        android:layout_height="456dp"
+        android:scrollbars="vertical" />
+
+    <com.google.android.material.button.MaterialButton
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Back To Menu"
+        android:onClick="goToMenu"
+        android:layout_gravity="center"
+        android:textColor="@color/textColor"
+        />
+</LinearLayout>
