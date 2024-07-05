@@ -29,7 +29,8 @@ android {
 }
 
 dependencies {
-    implementation(libs.glide.v4xx)
+    //implementation (libs.mathview)
+    //implementation(libs.glide.v4xx)
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
@@ -37,4 +38,5 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    //annotationProcessor( libs.compiler.v4xx)
 }

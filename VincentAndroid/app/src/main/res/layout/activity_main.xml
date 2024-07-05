@@ -9,28 +9,27 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="300dp">
-
-        <ImageView
-            android:id="@+id/myImageView"
-            android:layout_margin="50dp"
+        <LinearLayout
+            android:id="@+id/titlePicture"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-      />
-        <TextView
-            android:layout_width="234dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:rotation="360"
-            android:text="@string/GameName"
-            android:textColor="@color/textColor"
-            android:textSize="50sp"
-            android:textStyle="bold"
-            android:visibility="visible" />
+            android:layout_height="300dp"
+            >
 
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/TitleText"
+                android:layout_width="234dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:layout_marginLeft="85dp"
+                android:gravity="center"
+                android:rotation="360"
+                android:text="@string/GameName"
+                android:textColor="@color/textColor"
+                android:textSize="50sp"
+                android:textStyle="bold"
+                android:visibility="visible" />
+        </LinearLayout>
+
 
     <LinearLayout
         style="?android:attr/buttonBarStyle"
@@ -48,8 +47,8 @@
             android:layout_marginRight="70dp"
             android:layout_marginBottom="20dp"
             android:onClick="playGame"
-            android:textColor="@color/textColor"
             android:text="@string/Play"
+            android:textColor="@color/textColor"
             android:textSize="30dp" />
 
         <com.google.android.material.button.MaterialButton
@@ -61,8 +60,8 @@
             android:layout_marginRight="70dp"
             android:layout_marginBottom="20dp"
             android:onClick="goToGameRanking"
-            android:textColor="@color/textColor"
             android:text="@string/GameRanking"
+            android:textColor="@color/textColor"
             android:textSize="24dp" />
 
         <com.google.android.material.button.MaterialButton
@@ -74,8 +73,8 @@
             android:layout_marginRight="70dp"
             android:layout_marginBottom="20dp"
             android:onClick="goToYourRecord"
-            android:textColor="@color/textColor"
             android:text="@string/YourRecords"
+            android:textColor="@color/textColor"
             android:textSize="24sp" />
 
         <com.google.android.material.button.MaterialButton
@@ -87,8 +86,8 @@
             android:layout_marginRight="70dp"
             android:layout_marginBottom="20dp"
             android:onClick="goToSetting"
-            android:textColor="@color/textColor"
             android:text="@string/Setting"
+            android:textColor="@color/textColor"
             android:textSize="24dp" />
 
         <com.google.android.material.button.MaterialButton
@@ -99,8 +98,8 @@
             android:layout_marginLeft="70dp"
             android:layout_marginRight="70dp"
             android:onClick="closeGame"
-            android:textColor="@color/textColor"
             android:text="@string/Close"
+            android:textColor="@color/textColor"
             android:textSize="24dp" />
 
     </LinearLayout>

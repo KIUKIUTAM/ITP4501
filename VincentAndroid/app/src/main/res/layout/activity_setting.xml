@@ -50,12 +50,6 @@
                 android:text="@string/TimeUpMode"
                 android:onClick="setMode"/>
 
-            <RadioButton
-                android:id="@+id/UniversityMode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/university"
-                android:onClick="setMode"/>
         </RadioGroup>
 
 

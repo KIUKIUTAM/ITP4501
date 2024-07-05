@@ -5,13 +5,12 @@ import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteStatement;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.InputType;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,7 +23,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import java.util.Random;
 
-public class PlayGame extends AppCompatActivity {
+public class PlayGameForTimeUp extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     long startTime = 0;
     SQLiteDatabase db;
@@ -45,7 +44,12 @@ public class PlayGame extends AppCompatActivity {
     boolean start;
     int currentQuestion;
     boolean isStartBackToMenu;
+    int second;
     Thread t;
+    int effectiveTime;
+    int timeSet = 5;
+    private final Handler handler = new Handler(Looper.getMainLooper());
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +70,7 @@ public class PlayGame extends AppCompatActivity {
         btnStartAndDone = findViewById(R.id.btnStartAndDone);
         btnNext_Question = findViewById(R.id.btnNext_Question);
         isStartBackToMenu =false;
+        effectiveTime = 0;
         timerShowToggle(false);
         tvQuestionTitle.setVisibility(View.INVISIBLE);
         tvQuestionName.setVisibility(View.INVISIBLE);
@@ -75,19 +80,9 @@ public class PlayGame extends AppCompatActivity {
         btnNext_Question.setVisibility(View.INVISIBLE);
         btnStartAndDone.setVisibility(View.VISIBLE);
         etQuestionAns.setInputType(InputType.TYPE_CLASS_NUMBER);
-        etQuestionAns.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    done();
-                    return true;
-                }
-                return false;
-            }
-        });
-
         start =true;
         currentQuestion= 0;
+
         sharedPreferences = getSharedPreferences("GameMode", MODE_PRIVATE);
     }
 
@@ -99,74 +94,66 @@ public class PlayGame extends AppCompatActivity {
 
     private  void randomQuestion() {
 
-            for (int i = 0; i < 10; i++) {
-                Random random = new Random();
-                int operand1 = random.nextInt(100) + 1;
-                int operand2 = random.nextInt(100) + 1;
-                String[] operators = {"+", "-", "*", "/"};
-                String operator = operators[random.nextInt(operators.length)];
-                String question = operand1 + operator + operand2;
-                String answer = "";
-                switch (operator) {
-                    case "+":
-                        answer = String.valueOf(operand1 + operand2);
+        for (int i = 0; i < 10; i++) {
+            Random random = new Random();
+            int operand1 = random.nextInt(100) + 1;
+            int operand2 = random.nextInt(100) + 1;
+            String[] operators = {"+", "-", "*", "/"};
+            String operator = operators[random.nextInt(operators.length)];
+            String question = operand1 + operator + operand2;
+            String answer = "";
+            switch (operator) {
+                case "+":
+                    answer = String.valueOf(operand1 + operand2);
 
-                        break;
-                    case "-":
-                        if (operand1 - operand2 < 0) {
-                            question = operand2 + operator + operand1;
-                            answer = String.valueOf(operand2 - operand1);
-                        } else {
-                            answer = String.valueOf(operand1 - operand2);
-                        }
-                        break;
-                    case "*":
-                        answer = String.valueOf(operand1 * operand2);
-                        break;
-                    default:
-                        if (operand1 - operand2 < 0) {
-                            question = operand2 + operator + operand1;
-                            answer = String.valueOf(operand2 / operand1);
-                        } else {
-                            answer = String.valueOf(operand1 / operand2);
-                        }
-                        break;
-                }
-                questions[i][0] = question;
-                questions[i][1] = answer;
-                Log.d("question", "" + question);
-                Log.d("answer", "" + answer);
-            }
-        }
-    private void Timer() {
-        startTime = System.currentTimeMillis();
-        Thread t = new Thread() {
-            @Override
-            public void run() {
-                while (!isInterrupted()) {
-                    try {
-                        Thread.sleep(1000);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                long currentTime = System.currentTimeMillis();
-                                long time = currentTime - startTime;
-                                int seconds = (int) (time / 1000);
-
-                                tvTimer.setText(seconds+"");
-
-                            }
-                        });
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                    break;
+                case "-":
+                    if (operand1 - operand2 < 0) {
+                        question = operand2 + operator + operand1;
+                        answer = String.valueOf(operand2 - operand1);
+                    } else {
+                        answer = String.valueOf(operand1 - operand2);
                     }
+                    break;
+                case "*":
+                    answer = String.valueOf(operand1 * operand2);
+                    break;
+                default:
+                    if (operand1 - operand2 < 0) {
+                        question = operand2 + operator + operand1;
+                        answer = String.valueOf(operand2 / operand1);
+                    } else {
+                        answer = String.valueOf(operand1 / operand2);
+                    }
+                    break;
+            }
+            questions[i][0] = question;
+            questions[i][1] = answer;
+            Log.d("question", "" + question);
+            Log.d("answer", "" + answer);
+        }
+    }
+    private void Timer(int time) {
+        startTime = System.currentTimeMillis();
+        second = time;
+        t = new Thread(() -> {
+            while (!Thread.currentThread().isInterrupted() && second >= 0) {
+                handler.post(() -> {
+                    tvTimer.setText(String.valueOf(second));
+                    if (second == 0) {
+                        done();
+                    }
+                    second--;
+                });
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    break;
                 }
             }
-        };
+        });
         t.start();
-
-
-
     }
 
 
@@ -174,26 +161,28 @@ public class PlayGame extends AppCompatActivity {
     public void gameStartOrDone(View view) {
 
         if(start){
-            start = false;
-            isStartBackToMenu=false;
-            QuestionIndex=0;
-            randomQuestion();
-            tvQuestionTitle.setText("Question "+(QuestionIndex+1));
-            tvQuestionName.setText(questions[QuestionIndex][0]);
-            btnStartAndDone.setText("DONE");
-            timerShowToggle(true);
-            tvQuestionTitle.setVisibility(View.VISIBLE);
-            tvQuestionName.setVisibility(View.VISIBLE);
-            etQuestionAns.setVisibility(View.VISIBLE);
-
-            btnNext_Question.setVisibility(View.INVISIBLE);
-            btnNext_Question.setText("Next Question");
-            Timer();
+            start();
         }else{
             done();
         }
     }
+    public void start(){
+        Timer(timeSet);
+        start = false;
+        isStartBackToMenu=false;
+        QuestionIndex=0;
+        randomQuestion();
+        tvQuestionTitle.setText("Question "+(QuestionIndex+1));
+        tvQuestionName.setText(questions[QuestionIndex][0]);
+        btnStartAndDone.setText("DONE");
+        timerShowToggle(true);
+        tvQuestionTitle.setVisibility(View.VISIBLE);
+        tvQuestionName.setVisibility(View.VISIBLE);
+        etQuestionAns.setVisibility(View.VISIBLE);
+        btnNext_Question.setVisibility(View.INVISIBLE);
+        btnNext_Question.setText("Next Question");
 
+    }
     private void done(){
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(etQuestionAns.getWindowToken(), 0);
@@ -202,6 +191,7 @@ public class PlayGame extends AppCompatActivity {
         btnNext_Question.setVisibility(View.VISIBLE);
         if(ansWithoutSpaces.equals(questions[QuestionIndex][1])){
             tvIsCorrect.setText("Correct!");
+            effectiveTime+=second;
             currentQuestion++;
         }else{
             tvIsCorrect.setText("Incorrect");
@@ -214,6 +204,9 @@ public class PlayGame extends AppCompatActivity {
         btnStartAndDone.setVisibility(View.INVISIBLE);
         btnNext_Question.setVisibility(View.VISIBLE);
         QuestionIndex++;
+        if (t != null && !t.isInterrupted()) {
+            t.interrupt();
+        }
     }
 
 
@@ -231,8 +224,8 @@ public class PlayGame extends AppCompatActivity {
             tvIsCorrect.setVisibility(View.INVISIBLE);
             tvShowAns.setVisibility(View.INVISIBLE);
             btnStartAndDone.setVisibility(View.VISIBLE);
+            Timer(timeSet);
         }else{
-            t.stop();
             readonlyToggle(false);
             btnStartAndDone.setVisibility(View.VISIBLE);
             btnStartAndDone.setText("Restart");
@@ -244,7 +237,7 @@ public class PlayGame extends AppCompatActivity {
             tvShowAns.setVisibility(View.INVISIBLE);
             btnNext_Question.setText("Back To Menu");
             isStartBackToMenu =true;
-            insertDB(currentQuestion,Integer.valueOf(tvTimer.getText().toString()));
+            insertDB(currentQuestion);
         }
 
 
@@ -275,17 +268,16 @@ public class PlayGame extends AppCompatActivity {
         tvTimerHead.setVisibility(i);
         tvTimerTail.setVisibility(i);
     }
-    private void insertDB(int correctQuestion, int playingTime) {
+    private void insertDB(int correctQuestion) {
         String str = "";
 
         try {
-            str = "Normal Mode";
+            str = "Speed Time Mode";
             db = SQLiteDatabase.openOrCreateDatabase("/data/data/com.example.itp4915assignment_69/eBidDB", null);
-            String sql = "INSERT INTO GameLogNormal (playDate, playTime, GameMode, correctQuestion, playingTime) VALUES (date('now'), time('now'), ?, ?, ?);";
+            String sql = "INSERT INTO GameLogSpeed (playDate, playTime, GameMode, correctQuestion, playingTime) VALUES (date('now'), time('now'), 'Speed Time Mode', ?, ?);";
             SQLiteStatement statement = db.compileStatement(sql);
-            statement.bindString(1, str);
-            statement.bindLong(2, correctQuestion);
-            statement.bindLong(3, playingTime);
+            statement.bindLong(1, correctQuestion);
+            statement.bindLong(2, effectiveTime);
             statement.executeInsert();
 
         } catch (SQLiteException e) {

@@ -29,7 +29,6 @@ public class Setting extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("GameMode", MODE_PRIVATE);
         NormalMode=  findViewById(R.id.NormalMode);
         TimeUpMode=  findViewById(R.id.TimeUpMode);
-        UniversityMode=  findViewById(R.id.UniversityMode);
     }
 
     public void goToMenu(View view) {
@@ -42,10 +41,7 @@ public class Setting extends AppCompatActivity {
             Toast.makeText(this, "Normal Mode Start", Toast.LENGTH_LONG).show();
         }else if(TimeUpMode.isChecked()){
             ModeSetting =1;
-            Toast.makeText(this, "TimeUp Mode Start", Toast.LENGTH_LONG).show();
-        }else if(UniversityMode.isChecked()){
-            ModeSetting =2;
-            Toast.makeText(this, "University Mode Start", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Speed Time Mode Start", Toast.LENGTH_LONG).show();
         }
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("GameModeSetting", ModeSetting);

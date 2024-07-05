@@ -29,24 +29,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
+            android:layout_gravity="center"
             android:text="Sort By:"
             android:textColor="@color/textColor"/>
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:id="@+id/spinner_ip"
+            android:id="@+id/spRecord"
             android:spinnerMode="dropdown"
             android:layout_gravity="center_vertical"
             android:entries="@array/sortBy"
             android:layout_weight="2"
             />
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:spinnerMode="dropdown"
-            android:layout_gravity="center_vertical"
-            android:entries="@array/ASC"
-            android:layout_weight="1"/>
+        <com.google.android.material.button.MaterialButton
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter"
+        android:onClick="SetDataBase"
+        android:layout_gravity="center"
+        android:textColor="@color/textColor"
+        />
     </LinearLayout>
 
 

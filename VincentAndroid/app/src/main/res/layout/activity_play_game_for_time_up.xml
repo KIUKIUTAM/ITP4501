@@ -5,9 +5,10 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@drawable/back2"
     android:orientation="vertical"
-    tools:context=".PlayGame">
+    tools:context=".PlayGameForTimeUp"
+    >
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -15,7 +16,7 @@
         android:layout_height="56dp"
         android:layout_gravity="center"
         android:layout_marginTop="15dp"
-        android:background="@color/toolbar"
+        android:background="@color/white"
         android:gravity="center"
         app:titleTextColor="@color/background" />
 
@@ -39,7 +40,7 @@
                 android:gravity="center"
                 android:layout_marginLeft="30dp"
                 android:text="Timer："
-                android:textColor="@color/textColor"
+                android:textColor="@color/white"
                 android:textSize="50sp"
                 android:layout_weight="0.1"/>
             <TextView
@@ -48,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="0"
-                android:textColor="@color/textColor"
+                android:textColor="@color/white"
                 android:textSize="50sp"
                 android:layout_weight="0.2"/>
             <TextView
@@ -57,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text=" SEC"
-                android:textColor="@color/textColor"
+                android:textColor="@color/white"
                 android:textSize="50sp"
                 android:layout_weight="0.2"/>
         </LinearLayout>
@@ -70,7 +71,7 @@
             android:layout_marginTop="50dp"
             android:gravity="center"
             android:text="Question"
-            android:textColor="@color/textColor"
+            android:textColor="@color/white"
             android:textSize="30sp" />
 
         <TextView
@@ -79,7 +80,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Question"
-            android:textColor="@color/textColor"
+            android:textColor="@color/white"
             android:textSize="40sp" />
 
         <EditText
@@ -96,7 +97,7 @@
             android:background="@color/white"
             android:text="Start"
             android:onClick="gameStartOrDone"
-            android:textColor="@color/textColor"
+            android:textColor="@color/white"
             android:textSize="15sp"
             />
 
@@ -106,7 +107,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Correct!"
-            android:textColor="@color/textColor"
+            android:textColor="@color/white"
             android:textSize="40sp" />
 
         <TextView
@@ -118,7 +119,7 @@
             android:layout_marginRight="50dp"
             android:gravity="center"
             android:text="Answer is xx!"
-            android:textColor="@color/textColor"
+            android:textColor="@color/white"
             android:textSize="30sp" />
 
     </LinearLayout>
@@ -132,7 +133,7 @@
         android:onClick="Next_Question"
         android:text="Next Question"
         android:textSize="30sp"
-        android:textColor="@color/textColor"/>
+        android:textColor="@color/white"/>
 
 
 </LinearLayout>
