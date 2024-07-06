@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteStatement;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -17,7 +18,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +27,7 @@ import java.util.Random;
 
 public class PlayGame extends AppCompatActivity {
     SharedPreferences sharedPreferences;
+
     long startTime = 0;
     SQLiteDatabase db;
     private static final String TAG = "PlayGame";
@@ -41,11 +42,16 @@ public class PlayGame extends AppCompatActivity {
     Button btnNext_Question;
     TextView tvTimerHead;
     TextView tvTimerTail;
+    TextView tvShowFinish;
+    MediaPlayer mediaPlayer;
+    MediaPlayer mediaPlayerLoop;
     int GameMode;
     int QuestionIndex;
     boolean start;
-    int correntQuestion;
+    int correctQuestion;
+
     boolean isStartBackToMenu;
+    int seconds;
     private final Handler handler = new Handler(Looper.getMainLooper());
     Thread t;
     @SuppressLint("SetTextI18n")
@@ -67,8 +73,10 @@ public class PlayGame extends AppCompatActivity {
         tvShowAns = findViewById(R.id.tvShowAns);
         btnStartAndDone = findViewById(R.id.btnStartAndDone);
         btnNext_Question = findViewById(R.id.btnNext_Question);
+        tvShowFinish = findViewById(R.id.tvShowFinish);
         isStartBackToMenu =false;
         timerShowToggle(false);
+        tvShowFinish.setVisibility(View.INVISIBLE);
         tvQuestionTitle.setVisibility(View.INVISIBLE);
         tvQuestionName.setVisibility(View.INVISIBLE);
         etQuestionAns.setVisibility(View.INVISIBLE);
@@ -79,6 +87,7 @@ public class PlayGame extends AppCompatActivity {
         etQuestionAns.setInputType(InputType.TYPE_CLASS_NUMBER);
         etQuestionAns.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
+            //when I click complete on the soft keyboard do this function
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     done();
@@ -89,14 +98,22 @@ public class PlayGame extends AppCompatActivity {
         });
 
         start =true;
-        correntQuestion = 0;
+        correctQuestion = 0;
         sharedPreferences = getSharedPreferences("GameMode", MODE_PRIVATE);
     }
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mediaPlayerLoop != null) {
+            mediaPlayerLoop.release();//stop music
+            mediaPlayerLoop = null;
+        }
+    }
     protected void onResume() {
         super.onResume();
         GameMode = sharedPreferences.getInt("GameModeSetting", 0);
     }
+    //create ten random Question
     private  void randomQuestion() {
 
             for (int i = 0; i < 10; i++) {
@@ -138,7 +155,7 @@ public class PlayGame extends AppCompatActivity {
                 Log.d("answer", "" + answer);
             }
         }
-
+    //count the time on playing
     private void Timer() {
         startTime = System.currentTimeMillis();
         t = new Thread(() -> {
@@ -146,8 +163,7 @@ public class PlayGame extends AppCompatActivity {
                 handler.post(() -> {
                     long currentTime = System.currentTimeMillis();
                     long time = currentTime - startTime;
-                    int seconds = (int) (time / 1000);
-
+                    seconds = (int) (time / 1000);
                     tvTimer.setText(seconds+"");
                 });
                 try {
@@ -160,31 +176,34 @@ public class PlayGame extends AppCompatActivity {
         });
         t.start();
     }
-
-
+    //click event on the start/done button
     public void gameStartOrDone(View view) {
 
         if(start){
-            start = false;
-            isStartBackToMenu=false;
-            QuestionIndex=0;
-            randomQuestion();
-            tvQuestionTitle.setText("Question "+(QuestionIndex+1));
-            tvQuestionName.setText(questions[QuestionIndex][0]);
-            btnStartAndDone.setText("DONE");
-            timerShowToggle(true);
-            tvQuestionTitle.setVisibility(View.VISIBLE);
-            tvQuestionName.setVisibility(View.VISIBLE);
-            etQuestionAns.setVisibility(View.VISIBLE);
-
-            btnNext_Question.setVisibility(View.INVISIBLE);
-            btnNext_Question.setText("Next Question");
-            Timer();
+            start();
         }else{
             done();
         }
     }
-
+    public void start(){
+        Timer();
+        start = false;
+        isStartBackToMenu=false;
+        QuestionIndex=0;
+        randomQuestion();
+        tvQuestionTitle.setText("Question "+(QuestionIndex+1));
+        tvQuestionName.setText(questions[QuestionIndex][0]);
+        btnStartAndDone.setText("DONE");
+        timerShowToggle(true);
+        tvQuestionTitle.setVisibility(View.VISIBLE);
+        tvQuestionName.setVisibility(View.VISIBLE);
+        etQuestionAns.setVisibility(View.VISIBLE);
+        btnNext_Question.setVisibility(View.INVISIBLE);
+        btnNext_Question.setText("Next Question");
+        mediaPlayerLoop = MediaPlayer.create(this,R.raw.bright);
+        mediaPlayerLoop.setLooping(true);
+        mediaPlayerLoop.start();
+    }
     private void done(){
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(etQuestionAns.getWindowToken(), 0);
@@ -193,11 +212,15 @@ public class PlayGame extends AppCompatActivity {
         btnNext_Question.setVisibility(View.VISIBLE);
         if(ansWithoutSpaces.equals(questions[QuestionIndex][1])){
             tvIsCorrect.setText("Correct!");
-            correntQuestion++;
+            correctQuestion++;
+            mediaPlayer = MediaPlayer.create(this,R.raw.correctasd);
+            mediaPlayer.start();
         }else{
-            tvIsCorrect.setText("Incorrect");
-            tvShowAns.setText("Answer is "+questions[QuestionIndex][1]);
+            tvIsCorrect.setText("Wrong!");
+            tvShowAns.setText("Answer is "+questions[QuestionIndex][1]+"!");
             tvShowAns.setVisibility(View.VISIBLE);
+            mediaPlayer = MediaPlayer.create(this,R.raw.lose_funny );
+            mediaPlayer.start();
         }
         tvIsCorrect.setVisibility(View.VISIBLE);
         etQuestionAns.setText("");
@@ -206,11 +229,12 @@ public class PlayGame extends AppCompatActivity {
         btnNext_Question.setVisibility(View.VISIBLE);
         QuestionIndex++;
         if(QuestionIndex==10) {
-            btnNext_Question.setText("Finish!");
+            btnNext_Question.setText("CONTINUE!");
         }
     }
 
-
+    //next question or back to homepage
+    @SuppressLint("SetTextI18n")
     public void Next_Question(View view) {
         if(isStartBackToMenu){
             finish();
@@ -226,27 +250,29 @@ public class PlayGame extends AppCompatActivity {
             tvShowAns.setVisibility(View.INVISIBLE);
             btnStartAndDone.setVisibility(View.VISIBLE);
         }else{
-                timerShowToggle(true);
+            mediaPlayerLoop.release();
+            mediaPlayerLoop = null;
+             timerShowToggle(false);
                 readonlyToggle(true);
+                tvShowFinish.setVisibility(View.VISIBLE);
                 btnStartAndDone.setVisibility(View.VISIBLE);
                 btnStartAndDone.setText("Restart");
-                start =true;
+                tvQuestionTitle.setText("Correct: "+ correctQuestion +", Wrong "+(10- correctQuestion)+"!");
+                tvQuestionName.setText("Time: "+seconds+" sec");
+                tvQuestionName.setVisibility(View.VISIBLE);
                 tvQuestionTitle.setVisibility(View.VISIBLE);
-                tvQuestionTitle.setText("Your have "+ correntQuestion +" Corrent Questions");
-                tvQuestionName.setVisibility(View.INVISIBLE);
+                start =true;
                 etQuestionAns.setVisibility(View.INVISIBLE);
                 tvIsCorrect.setVisibility(View.INVISIBLE);
                 tvShowAns.setVisibility(View.INVISIBLE);
                 btnNext_Question.setText("Back To Menu");
                 isStartBackToMenu =true;
-                insertDB(correntQuestion,Integer.valueOf(tvTimer.getText().toString()));
+                insertDB(correctQuestion,Integer.valueOf(tvTimer.getText().toString()));
                 if (t != null && !t.isInterrupted()) {
                     t.interrupt();
                 }
             }
         }
-
-
 
     private void readonlyToggle(boolean readonlyToggle){
         if(readonlyToggle){
@@ -295,5 +321,4 @@ public class PlayGame extends AppCompatActivity {
             }
         }
     }
-
 }

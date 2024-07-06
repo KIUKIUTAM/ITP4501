@@ -52,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences("GameMode",MODE_PRIVATE);
         try {
+
+            //create Database
             db = SQLiteDatabase.openDatabase("/data/data/com.example.itp4915assignment_69/eBidDB", null, SQLiteDatabase.CREATE_IF_NECESSARY);
 
             String sql = "DROP TABLE IF EXISTS GameLogNormal;";
@@ -86,13 +88,12 @@ public class MainActivity extends AppCompatActivity {
                 db.close();
             }
         }
-        //Timer();
     }
     @Override
     protected void onResume() {
         super.onResume();
 
-
+        //change the image on the homepage basic on the game mode
         GameMode = sharedPreferences.getInt("GameModeSetting", 0);
         if(GameMode==0){
             titlePicture.setBackgroundResource(R.drawable.normal);
@@ -133,29 +134,6 @@ public class MainActivity extends AppCompatActivity {
     public void goToSetting(View view){
         Intent intent = new Intent(this,Setting.class);
         startActivity(intent);
-
-    }
-    private void Timer() {
-        Thread t = new Thread() {
-            @Override
-            public void run() {
-                boolean toggle=true;
-                int ro=0;
-                while (true){
-                    ro+=10;
-                    try {
-                            Thread.sleep(100);
-                            myImageView.setRotationX(ro);
-                            toggle=false;
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
-        };
-        t.start();
-
-
 
     }
 }

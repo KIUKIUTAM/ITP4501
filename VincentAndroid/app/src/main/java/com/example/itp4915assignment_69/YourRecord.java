@@ -44,8 +44,8 @@ public class YourRecord extends AppCompatActivity {
         }
 
     }
-    
 
+    //database for Normal Mode
     private void setupDatabaseNormal() {
         SQLiteDatabase db = null;
         Cursor cursor = null;
@@ -89,6 +89,8 @@ public class YourRecord extends AppCompatActivity {
             }
         }
     }
+
+    //database for Speed Time Mode
     private void setupDatabaseSpeed() {
         SQLiteDatabase db = null;
         Cursor cursor = null;

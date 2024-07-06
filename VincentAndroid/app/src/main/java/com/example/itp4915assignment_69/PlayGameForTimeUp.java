@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteStatement;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -40,10 +41,13 @@ public class PlayGameForTimeUp extends AppCompatActivity {
     Button btnNext_Question;
     TextView tvTimerHead;
     TextView tvTimerTail;
+    TextView tvShowFinish;
+    MediaPlayer mediaPlayer;
+    MediaPlayer mediaPlayerLoop;
     int GameMode;
     int QuestionIndex;
     boolean start;
-    int correntQuestion;
+    int correctQuestion;
     boolean isStartBackToMenu;
     int second;
     Thread t;
@@ -70,9 +74,11 @@ public class PlayGameForTimeUp extends AppCompatActivity {
         tvShowAns = findViewById(R.id.tvShowAns);
         btnStartAndDone = findViewById(R.id.btnStartAndDone);
         btnNext_Question = findViewById(R.id.btnNext_Question);
+        tvShowFinish = findViewById(R.id.tvShowFinish);
         isStartBackToMenu =false;
         effectiveTime = 0;
         timerShowToggle(false);
+        tvShowFinish.setVisibility(View.INVISIBLE);
         tvQuestionTitle.setVisibility(View.INVISIBLE);
         tvQuestionName.setVisibility(View.INVISIBLE);
         etQuestionAns.setVisibility(View.INVISIBLE);
@@ -92,11 +98,18 @@ public class PlayGameForTimeUp extends AppCompatActivity {
             }
         });
         start =true;
-        correntQuestion = 0;
-
+        correctQuestion = 0;
         sharedPreferences = getSharedPreferences("GameMode", MODE_PRIVATE);
-    }
 
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mediaPlayerLoop != null) {
+            mediaPlayerLoop.release();
+            mediaPlayerLoop = null;
+        }
+    }
     protected void onResume() {
         super.onResume();
         GameMode = sharedPreferences.getInt("GameModeSetting", 0);
@@ -166,8 +179,6 @@ public class PlayGameForTimeUp extends AppCompatActivity {
         t.start();
     }
 
-
-
     public void gameStartOrDone(View view) {
 
         if(start){
@@ -191,7 +202,9 @@ public class PlayGameForTimeUp extends AppCompatActivity {
         etQuestionAns.setVisibility(View.VISIBLE);
         btnNext_Question.setVisibility(View.INVISIBLE);
         btnNext_Question.setText("Next Question");
-
+        mediaPlayerLoop = MediaPlayer.create(this,R.raw.speed_up);
+        mediaPlayerLoop.setLooping(true);
+        mediaPlayerLoop.start();
     }
     private void done(){
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
@@ -202,11 +215,15 @@ public class PlayGameForTimeUp extends AppCompatActivity {
         if(ansWithoutSpaces.equals(questions[QuestionIndex][1])){
             tvIsCorrect.setText("Correct!");
             effectiveTime+=second;
-            correntQuestion++;
+            correctQuestion++;
+            mediaPlayer = MediaPlayer.create(this,R.raw.correctasd);
+            mediaPlayer.start();
         }else{
-            tvIsCorrect.setText("Incorrect");
-            tvShowAns.setText("Answer is "+questions[QuestionIndex][1]);
+            tvIsCorrect.setText("Wrong!");
+            tvShowAns.setText("Answer is "+questions[QuestionIndex][1]+"!");
             tvShowAns.setVisibility(View.VISIBLE);
+            mediaPlayer = MediaPlayer.create(this,R.raw.lose_funny );
+            mediaPlayer.start();
         }
         tvIsCorrect.setVisibility(View.VISIBLE);
         etQuestionAns.setText("");
@@ -218,11 +235,12 @@ public class PlayGameForTimeUp extends AppCompatActivity {
             t.interrupt();
         }
         if(QuestionIndex==10) {
-            btnNext_Question.setText("Finish!");
+            btnNext_Question.setText("CONTINUE!");
         }
     }
 
 
+    @SuppressLint("SetTextI18n")
     public void Next_Question(View view) {
         if(isStartBackToMenu){
             finish();
@@ -239,24 +257,27 @@ public class PlayGameForTimeUp extends AppCompatActivity {
             btnStartAndDone.setVisibility(View.VISIBLE);
             Timer(timeSet);
         }else{
+            mediaPlayerLoop.release();
+            mediaPlayerLoop = null;
+            timerShowToggle(false);
             readonlyToggle(false);
+            tvShowFinish.setVisibility(View.VISIBLE);
             btnStartAndDone.setVisibility(View.VISIBLE);
             btnStartAndDone.setText("Restart");
-            tvQuestionTitle.setText("Your have "+ effectiveTime +" effective Time ");
+            tvQuestionTitle.setText("Correct: "+ correctQuestion +", Wrong "+(10- correctQuestion)+"!");
+            tvQuestionName.setText("Effective Time: "+effectiveTime+" sec");
+            tvQuestionName.setVisibility(View.VISIBLE);
             tvQuestionTitle.setVisibility(View.VISIBLE);
             start =true;
-
-            tvQuestionName.setVisibility(View.INVISIBLE);
             etQuestionAns.setVisibility(View.INVISIBLE);
             tvIsCorrect.setVisibility(View.INVISIBLE);
             tvShowAns.setVisibility(View.INVISIBLE);
             btnNext_Question.setText("Back To Menu");
             isStartBackToMenu =true;
-            insertDB(correntQuestion);
+            insertDB(correctQuestion);
         }
-
-
     }
+
     private void readonlyToggle(boolean readonlyToggle){
         if(readonlyToggle){
             etQuestionAns.setInputType(InputType.TYPE_NULL);
