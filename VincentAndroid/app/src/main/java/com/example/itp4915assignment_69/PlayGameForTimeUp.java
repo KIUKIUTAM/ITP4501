@@ -10,12 +10,13 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.InputType;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -42,7 +43,7 @@ public class PlayGameForTimeUp extends AppCompatActivity {
     int GameMode;
     int QuestionIndex;
     boolean start;
-    int currentQuestion;
+    int correntQuestion;
     boolean isStartBackToMenu;
     int second;
     Thread t;
@@ -80,8 +81,18 @@ public class PlayGameForTimeUp extends AppCompatActivity {
         btnNext_Question.setVisibility(View.INVISIBLE);
         btnStartAndDone.setVisibility(View.VISIBLE);
         etQuestionAns.setInputType(InputType.TYPE_CLASS_NUMBER);
+        etQuestionAns.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    done();
+                    return true;
+                }
+                return false;
+            }
+        });
         start =true;
-        currentQuestion= 0;
+        correntQuestion = 0;
 
         sharedPreferences = getSharedPreferences("GameMode", MODE_PRIVATE);
     }
@@ -89,7 +100,6 @@ public class PlayGameForTimeUp extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         GameMode = sharedPreferences.getInt("GameModeSetting", 0);
-        Toast.makeText(this, GameMode+"", Toast.LENGTH_LONG).show();
     }
 
     private  void randomQuestion() {
@@ -192,7 +202,7 @@ public class PlayGameForTimeUp extends AppCompatActivity {
         if(ansWithoutSpaces.equals(questions[QuestionIndex][1])){
             tvIsCorrect.setText("Correct!");
             effectiveTime+=second;
-            currentQuestion++;
+            correntQuestion++;
         }else{
             tvIsCorrect.setText("Incorrect");
             tvShowAns.setText("Answer is "+questions[QuestionIndex][1]);
@@ -206,6 +216,9 @@ public class PlayGameForTimeUp extends AppCompatActivity {
         QuestionIndex++;
         if (t != null && !t.isInterrupted()) {
             t.interrupt();
+        }
+        if(QuestionIndex==10) {
+            btnNext_Question.setText("Finish!");
         }
     }
 
@@ -229,15 +242,17 @@ public class PlayGameForTimeUp extends AppCompatActivity {
             readonlyToggle(false);
             btnStartAndDone.setVisibility(View.VISIBLE);
             btnStartAndDone.setText("Restart");
+            tvQuestionTitle.setText("Your have "+ effectiveTime +" effective Time ");
+            tvQuestionTitle.setVisibility(View.VISIBLE);
             start =true;
-            tvQuestionTitle.setVisibility(View.INVISIBLE);
+
             tvQuestionName.setVisibility(View.INVISIBLE);
             etQuestionAns.setVisibility(View.INVISIBLE);
             tvIsCorrect.setVisibility(View.INVISIBLE);
             tvShowAns.setVisibility(View.INVISIBLE);
             btnNext_Question.setText("Back To Menu");
             isStartBackToMenu =true;
-            insertDB(currentQuestion);
+            insertDB(correntQuestion);
         }
 
 

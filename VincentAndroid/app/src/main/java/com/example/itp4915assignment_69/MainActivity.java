@@ -64,6 +64,18 @@ public class MainActivity extends AppCompatActivity {
             db.execSQL(sql);
             sql = "INSERT INTO GameLogNormal (playDate, playTime,GameMode, correctQuestion,playingTime) VALUES (date('now'), time('now'),'Normal Mode',3, 50);";
             db.execSQL(sql);
+            sql = "INSERT INTO GameLogNormal (playDate, playTime,GameMode, correctQuestion,playingTime) VALUES (date('now'), time('now'),'Normal Mode',3, 50);";
+            db.execSQL(sql);
+            sql = "INSERT INTO GameLogNormal (playDate, playTime,GameMode, correctQuestion,playingTime) VALUES (date('now'), time('now'),'Normal Mode',3, 50);";
+            db.execSQL(sql);
+            sql = "INSERT INTO GameLogNormal (playDate, playTime,GameMode, correctQuestion,playingTime) VALUES (date('now'), time('now'),'Normal Mode',3, 50);";
+            db.execSQL(sql);
+            sql = "INSERT INTO GameLogSpeed (playDate, playTime,GameMode, correctQuestion,playingTime) VALUES (date('now'), time('now'),'Speed Time Mode',8, 9);";
+            db.execSQL(sql);
+            sql = "INSERT INTO GameLogSpeed (playDate, playTime,GameMode, correctQuestion,playingTime) VALUES (date('now'), time('now'),'Speed Time Mode',8, 9);";
+            db.execSQL(sql);
+            sql = "INSERT INTO GameLogSpeed (playDate, playTime,GameMode, correctQuestion,playingTime) VALUES (date('now'), time('now'),'Speed Time Mode',8, 9);";
+            db.execSQL(sql);
             sql = "INSERT INTO GameLogSpeed (playDate, playTime,GameMode, correctQuestion,playingTime) VALUES (date('now'), time('now'),'Speed Time Mode',8, 9);";
             db.execSQL(sql);
         } catch (SQLiteException e) {
@@ -79,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Toast.makeText(this, "onResume", Toast.LENGTH_LONG).show();
+
 
         GameMode = sharedPreferences.getInt("GameModeSetting", 0);
         if(GameMode==0){
@@ -93,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        Toast.makeText(this, "onPause", Toast.LENGTH_LONG).show();
     }
     public void closeGame(View view){
         finish();

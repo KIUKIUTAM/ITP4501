@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:layout_gravity="center"
-            android:text="Sort By:"
+            android:text="Record Name:"
             android:textColor="@color/textColor"/>
         <Spinner
             android:layout_width="wrap_content"
@@ -56,7 +56,7 @@
     <ListView
         android:id="@+id/lvRanking"
         android:layout_width="match_parent"
-        android:layout_height="456dp"
+        android:layout_height="501dp"
         android:scrollbars="vertical" />
 
     <com.google.android.material.button.MaterialButton
