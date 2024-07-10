@@ -203,6 +203,9 @@ public class PlayGame extends AppCompatActivity {
         mediaPlayerLoop = MediaPlayer.create(this,R.raw.bright);
         mediaPlayerLoop.setLooping(true);
         mediaPlayerLoop.start();
+        correctQuestion = 0;
+        tvShowFinish.setVisibility(View.INVISIBLE);
+        readonlyToggle(false);
     }
     private void done(){
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
